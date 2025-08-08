@@ -1,0 +1,22 @@
+{
+  "name": "multitoolspro",
+  "version": "1.0.0",
+  "description": "A comprehensive multi-tools website with image converter, compressor, age calculator, and HTML to text converter",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "multi-tools",
+    "image-converter",
+    "image-compressor",
+    "age-calculator",
+    "html-to-text"
+  ],
+  "author": "Multitoolspro Team",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
