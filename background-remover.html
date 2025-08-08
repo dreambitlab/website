@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Background Remover - MultiTools Hub</title>
+    <meta name="description" content="Remove backgrounds from images automatically using AI. Fast, accurate, and free online background removal tool for photos and graphics.">
+    <link rel="stylesheet" href="assets/styles.css">
+    <link rel="stylesheet" href="assets/background-remover.css">
+    <link href="assets/https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header" id="header">
+        <nav class="nav container">
+            <div class="nav__brand">
+                <i class="fas fa-tools nav__logo-icon"></i>
+                <span class="nav__logo-text">MultiTools Hub</span>
+            </div>
+            
+            <div class="nav__menu" id="nav-menu">
+                <ul class="nav__list">
+                    <li class="nav__item">
+                        <a href="index.html" class="nav__link">Home</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="#tools" class="nav__link">Tools</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="index.html#about" class="nav__link">About</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="index.html#contact" class="nav__link">Contact</a>
+                    </li>
+                </ul>
+                <div class="nav__close" id="nav-close">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            
+            <div class="nav__toggle" id="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Tool Header -->
+        <section class="tool-header section">
+            <div class="container">
+                <div class="tool-header__content">
+                    <div class="tool-header__icon">
+                        <i class="fas fa-cut"></i>
+                    </div>
+                    <h1 class="tool-header__title">Background Remover</h1>
+                    <p class="tool-header__description">
+                        Remove backgrounds from your images automatically using advanced AI technology. 
+                        Perfect for product photos, portraits, and graphics. Fast, accurate, and completely free.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Background Remover Tool -->
+        <section class="remover-tool section">
+            <div class="container">
+                <div class="remover__container">
+                    <!-- Upload Area -->
+                    <div class="upload-area" id="upload-area">
+                        <div class="upload-area__content">
+                            <i class="fas fa-cloud-upload-alt upload-area__icon"></i>
+                            <h3 class="upload-area__title">Drop your image here</h3>
+                            <p class="upload-area__subtitle">or click to browse</p>
+                            <input type="file" id="file-input" class="upload-area__input" accept="image/*">
+                            <div class="upload-area__info">
+                                <div class="info-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Supports JPG, PNG, WebP</span>
+                                </div>
+                                <div class="info-item">
+                                    <i class="fas fa-shield-alt"></i>
+                                    <span>100% Secure & Private</span>
+                                </div>
+                                <div class="info-item">
+                                    <i class="fas fa-bolt"></i>
+                                    <span>AI-Powered Processing</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Processing Status -->
+                    <div class="processing-status" id="processing-status" style="display: none;">
+                        <div class="status-content">
+                            <div class="status-icon">
+                                <div class="spinner"></div>
+                            </div>
+                            <h3 class="status-title">Processing Your Image</h3>
+                            <p class="status-description">AI is analyzing and removing the background...</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-fill"></div>
+                            </div>
+                            <div class="progress-text" id="progress-text">Analyzing image...</div>
+                        </div>
+                    </div>
+
+                    <!-- Image Editor -->
+                    <div class="image-editor" id="image-editor" style="display: none;">
+                        <div class="editor-header">
+                            <h3 class="editor-title">Background Removal Result</h3>
+                            <div class="editor-controls">
+                                <button class="control-btn" id="toggle-view" title="Toggle Original/Result">
+                                    <i class="fas fa-eye"></i>
+                                    <span>Compare</span>
+                                </button>
+                                <button class="control-btn" id="reset-btn" title="Upload New Image">
+                                    <i class="fas fa-upload"></i>
+                                    <span>New Image</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="editor-workspace">
+                            <!-- Image Comparison -->
+                            <div class="image-comparison" id="image-comparison">
+                                <div class="comparison-container">
+                                    <div class="image-panel">
+                                        <h4 class="panel-title">Original</h4>
+                                        <div class="image-container">
+                                            <img id="original-image" class="preview-image" alt="Original image">
+                                            <div class="image-info" id="original-info">
+                                                <span class="file-size">2.5 MB</span>
+                                                <span class="dimensions">1920 × 1080</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="comparison-divider">
+                                        <div class="divider-line"></div>
+                                        <div class="divider-icon">
+                                            <i class="fas fa-arrows-alt-h"></i>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="image-panel">
+                                        <h4 class="panel-title">Background Removed</h4>
+                                        <div class="image-container transparent-bg">
+                                            <img id="processed-image" class="preview-image" alt="Processed image">
+                                            <div class="image-info" id="processed-info">
+                                                <span class="file-size">1.8 MB</span>
+                                                <span class="dimensions">1920 × 1080</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Background Options -->
+                            <div class="background-options">
+                                <h4 class="options-title">Choose Background</h4>
+                                <div class="background-grid">
+                                    <div class="bg-option active" data-bg="transparent" title="Transparent">
+                                        <div class="bg-preview transparent-pattern"></div>
+                                        <span class="bg-label">Transparent</span>
+                                    </div>
+                                    <div class="bg-option" data-bg="white" title="White">
+                                        <div class="bg-preview" style="background: white;"></div>
+                                        <span class="bg-label">White</span>
+                                    </div>
+                                    <div class="bg-option" data-bg="black" title="Black">
+                                        <div class="bg-preview" style="background: black;"></div>
+                                        <span class="bg-label">Black</span>
+                                    </div>
+                                    <div class="bg-option" data-bg="blue" title="Blue">
+                                        <div class="bg-preview" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                                        <span class="bg-label">Blue</span>
+                                    </div>
+                                    <div class="bg-option" data-bg="green" title="Green">
+                                        <div class="bg-preview" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+                                        <span class="bg-label">Green</span>
+                                    </div>
+                                    <div class="bg-option" data-bg="custom" title="Custom Color">
+                                        <div class="bg-preview custom-color">
+                                            <i class="fas fa-palette"></i>
+                                        </div>
+                                        <span class="bg-label">Custom</span>
+                                        <input type="color" id="custom-color" value="#ff6b6b" style="display: none;">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Download Options -->
+                            <div class="download-section">
+                                <div class="download-options">
+                                    <div class="format-selector">
+                                        <label for="output-format">Format:</label>
+                                        <select id="output-format" class="format-select">
+                                            <option value="png">PNG (Recommended)</option>
+                                            <option value="jpeg">JPEG</option>
+                                            <option value="webp">WebP</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="quality-selector" id="quality-selector" style="display: none;">
+                                        <label for="quality-slider">Quality: <span id="quality-value">90</span>%</label>
+                                        <input type="range" id="quality-slider" min="10" max="100" value="90" class="quality-range">
+                                    </div>
+                                </div>
+                                
+                                <button class="download-btn" id="download-btn">
+                                    <i class="fas fa-download"></i>
+                                    <span>Download Image</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features section">
+            <div class="container">
+                <h2 class="section__title">Why Choose Our Background Remover?</h2>
+                <div class="features__grid">
+                    <div class="feature-card">
+                        <i class="fas fa-robot feature-card__icon"></i>
+                        <h3 class="feature-card__title">AI-Powered</h3>
+                        <p class="feature-card__description">
+                            Advanced machine learning algorithms automatically detect and remove backgrounds with precision.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-magic feature-card__icon"></i>
+                        <h3 class="feature-card__title">One-Click Removal</h3>
+                        <p class="feature-card__description">
+                            Simply upload your image and let our AI do the work. No manual editing required.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-palette feature-card__icon"></i>
+                        <h3 class="feature-card__title">Custom Backgrounds</h3>
+                        <p class="feature-card__description">
+                            Replace removed backgrounds with solid colors, gradients, or keep it transparent.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-download feature-card__icon"></i>
+                        <h3 class="feature-card__title">High Quality Output</h3>
+                        <p class="feature-card__description">
+                            Download your images in multiple formats with customizable quality settings.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Use Cases Section -->
+        <section class="use-cases section">
+            <div class="container">
+                <h2 class="section__title">Perfect For</h2>
+                <div class="use-cases__grid">
+                    <div class="use-case">
+                        <div class="use-case__icon">
+                            <i class="fas fa-shopping-bag"></i>
+                        </div>
+                        <h3 class="use-case__title">E-commerce</h3>
+                        <p class="use-case__description">Create clean product photos with consistent backgrounds for your online store.</p>
+                    </div>
+                    <div class="use-case">
+                        <div class="use-case__icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <h3 class="use-case__title">Professional Photos</h3>
+                        <p class="use-case__description">Remove distracting backgrounds from portraits and headshots.</p>
+                    </div>
+                    <div class="use-case">
+                        <div class="use-case__icon">
+                            <i class="fas fa-paint-brush"></i>
+                        </div>
+                        <h3 class="use-case__title">Graphic Design</h3>
+                        <p class="use-case__description">Isolate objects and subjects for use in designs and compositions.</p>
+                    </div>
+                    <div class="use-case">
+                        <div class="use-case__icon">
+                            <i class="fas fa-share-alt"></i>
+                        </div>
+                        <h3 class="use-case__title">Social Media</h3>
+                        <p class="use-case__description">Create eye-catching posts with clean, professional-looking images.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How to Use Section -->
+        <section class="how-to-use section">
+            <div class="container">
+                <h2 class="section__title">How to Use</h2>
+                <div class="steps__container">
+                    <div class="step">
+                        <div class="step__number">1</div>
+                        <div class="step__content">
+                            <h3 class="step__title">Upload Image</h3>
+                            <p class="step__description">
+                                Drag and drop your image or click to browse. Supports JPG, PNG, and WebP formats.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step__number">2</div>
+                        <div class="step__content">
+                            <h3 class="step__title">AI Processing</h3>
+                            <p class="step__description">
+                                Our AI automatically analyzes your image and removes the background with precision.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step__number">3</div>
+                        <div class="step__content">
+                            <h3 class="step__title">Customize & Download</h3>
+                            <p class="step__description">
+                                Choose a new background color or keep it transparent, then download in your preferred format.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__content">
+                <div class="footer__section">
+                    <div class="footer__brand">
+                        <i class="fas fa-tools footer__logo-icon"></i>
+                        <span class="footer__logo-text">MultiTools Hub</span>
+                    </div>
+                    <p class="footer__description">
+                        Your trusted partner for digital tools and utilities. 
+                        Making complex tasks simple and accessible.
+                    </p>
+                </div>
+                
+                <div class="footer__section">
+                    <h3 class="footer__title">Other Tools</h3>
+                    <div class="footer__links">
+                        <a href="image-converter.html" class="footer__link">Image Converter</a>
+                        <a href="age-calculator.html" class="footer__link">Age Calculator</a>
+                        <a href="#" class="footer__link">HTML to Text</a>
+                    </div>
+                </div>
+                
+                <div class="footer__section">
+                    <h3 class="footer__title">Contact Info</h3>
+                    <div class="footer__contact">
+                        <p class="footer__contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>contact@multitoolshub.com</span>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="footer__section">
+                    <h3 class="footer__title">Follow Us</h3>
+                    <div class="footer__social">
+                        <a href="#" class="footer__social-link" aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="footer__social-link" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="footer__social-link" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="footer__social-link" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer__bottom">
+                <p class="footer__copyright">
+                    &copy; <span id="current-year">2024</span> MultiTools Hub. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/script.js"></script>
+    <script src="assets/background-remover.js"></script>
+</body>
+</html>

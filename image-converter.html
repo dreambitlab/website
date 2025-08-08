@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Converter - MultiTools Hub</title>
+    <meta name="description" content="Convert images between different formats like JPG, PNG, WebP, GIF, and BMP. Fast, secure, and free online image converter.">
+    <link rel="stylesheet" href="assets/styles.css">
+    <link rel="stylesheet" href="assets/image-converter.css">
+    <link href="assets/https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header" id="header">
+        <nav class="nav container">
+            <div class="nav__brand">
+                <i class="fas fa-tools nav__logo-icon"></i>
+                <span class="nav__logo-text">MultiTools Hub</span>
+            </div>
+            
+            <div class="nav__menu" id="nav-menu">
+                <ul class="nav__list">
+                    <li class="nav__item">
+                        <a href="index.html" class="nav__link">Home</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="#tools" class="nav__link">Tools</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="index.html#about" class="nav__link">About</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="index.html#contact" class="nav__link">Contact</a>
+                    </li>
+                </ul>
+                <div class="nav__close" id="nav-close">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            
+            <div class="nav__toggle" id="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Tool Header -->
+        <section class="tool-header section">
+            <div class="container">
+                <div class="tool-header__content">
+                    <div class="tool-header__icon">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <h1 class="tool-header__title">Image Converter</h1>
+                    <p class="tool-header__description">
+                        Convert your images between different formats including JPG, PNG, WebP, GIF, and BMP. 
+                        Fast, secure, and completely free. All processing happens in your browser.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Image Converter Tool -->
+        <section class="converter-tool section">
+            <div class="container">
+                <div class="converter__container">
+                    <!-- Upload Area -->
+                    <div class="upload-area" id="upload-area">
+                        <div class="upload-area__content">
+                            <i class="fas fa-cloud-upload-alt upload-area__icon"></i>
+                            <h3 class="upload-area__title">Drop your image here</h3>
+                            <p class="upload-area__subtitle">or click to browse</p>
+                            <input type="file" id="file-input" class="upload-area__input" accept="image/*" multiple>
+                            <div class="upload-area__formats">
+                                <span class="format-tag">JPG</span>
+                                <span class="format-tag">PNG</span>
+                                <span class="format-tag">WebP</span>
+                                <span class="format-tag">GIF</span>
+                                <span class="format-tag">BMP</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Conversion Settings -->
+                    <div class="conversion-settings" id="conversion-settings" style="display: none;">
+                        <h3 class="settings__title">Conversion Settings</h3>
+                        
+                        <div class="settings__group">
+                            <label for="output-format" class="settings__label">Output Format:</label>
+                            <select id="output-format" class="settings__select">
+                                <option value="jpeg">JPEG (.jpg)</option>
+                                <option value="png">PNG (.png)</option>
+                                <option value="webp">WebP (.webp)</option>
+                                <option value="gif">GIF (.gif)</option>
+                                <option value="bmp">BMP (.bmp)</option>
+                            </select>
+                        </div>
+
+                        <div class="settings__group" id="quality-group">
+                            <label for="quality-slider" class="settings__label">
+                                Quality: <span id="quality-value">90</span>%
+                            </label>
+                            <input type="range" id="quality-slider" class="settings__slider" 
+                                   min="10" max="100" value="90">
+                            <div class="slider-labels">
+                                <span>Lower size</span>
+                                <span>Higher quality</span>
+                            </div>
+                        </div>
+
+                        <div class="settings__group">
+                            <label class="settings__checkbox">
+                                <input type="checkbox" id="maintain-aspect-ratio" checked>
+                                <span class="checkmark"></span>
+                                Maintain aspect ratio
+                            </label>
+                        </div>
+
+                        <div class="settings__actions">
+                            <button id="convert-btn" class="btn btn--primary">
+                                <i class="fas fa-magic"></i>
+                                Convert Images
+                            </button>
+                            <button id="clear-btn" class="btn btn--secondary">
+                                <i class="fas fa-trash"></i>
+                                Clear All
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Image Preview Area -->
+                    <div class="image-preview" id="image-preview" style="display: none;">
+                        <h3 class="preview__title">Image Preview & Results</h3>
+                        <div class="preview__container" id="preview-container">
+                            <!-- Dynamic image cards will be inserted here -->
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="progress-container" id="progress-container" style="display: none;">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                        <p class="progress-text" id="progress-text">Converting images...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features section">
+            <div class="container">
+                <h2 class="section__title">Why Use Our Image Converter?</h2>
+                <div class="features__grid">
+                    <div class="feature-card">
+                        <i class="fas fa-shield-alt feature-card__icon"></i>
+                        <h3 class="feature-card__title">100% Secure</h3>
+                        <p class="feature-card__description">
+                            All processing happens in your browser. Your images never leave your device.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-bolt feature-card__icon"></i>
+                        <h3 class="feature-card__title">Lightning Fast</h3>
+                        <p class="feature-card__description">
+                            Convert multiple images simultaneously with optimized processing.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-cogs feature-card__icon"></i>
+                        <h3 class="feature-card__title">Multiple Formats</h3>
+                        <p class="feature-card__description">
+                            Support for JPG, PNG, WebP, GIF, and BMP formats with quality control.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-mobile-alt feature-card__icon"></i>
+                        <h3 class="feature-card__title">Works Everywhere</h3>
+                        <p class="feature-card__description">
+                            Compatible with all modern browsers and devices. No installation required.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How to Use Section -->
+        <section class="how-to-use section">
+            <div class="container">
+                <h2 class="section__title">How to Use</h2>
+                <div class="steps__container">
+                    <div class="step">
+                        <div class="step__number">1</div>
+                        <div class="step__content">
+                            <h3 class="step__title">Upload Images</h3>
+                            <p class="step__description">
+                                Drag and drop your images or click to browse. You can select multiple images at once.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step__number">2</div>
+                        <div class="step__content">
+                            <h3 class="step__title">Choose Format</h3>
+                            <p class="step__description">
+                                Select your desired output format and adjust quality settings if needed.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step__number">3</div>
+                        <div class="step__content">
+                            <h3 class="step__title">Convert & Download</h3>
+                            <p class="step__description">
+                                Click convert and download your processed images individually or as a ZIP file.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__content">
+                <div class="footer__section">
+                    <div class="footer__brand">
+                        <i class="fas fa-tools footer__logo-icon"></i>
+                        <span class="footer__logo-text">MultiTools Hub</span>
+                    </div>
+                    <p class="footer__description">
+                        Your trusted partner for digital tools and utilities. 
+                        Making complex tasks simple and accessible.
+                    </p>
+                </div>
+                
+                <div class="footer__section">
+                    <h3 class="footer__title">Other Tools</h3>
+                    <div class="footer__links">
+                        <a href="background-remover.html" class="footer__link">Background Remover</a>
+                        <a href="age-calculator.html" class="footer__link">Age Calculator</a>
+                        <a href="#" class="footer__link">HTML to Text</a>
+                    </div>
+                </div>
+                
+                <div class="footer__section">
+                    <h3 class="footer__title">Contact Info</h3>
+                    <div class="footer__contact">
+                        <p class="footer__contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>contact@multitoolshub.com</span>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="footer__section">
+                    <h3 class="footer__title">Follow Us</h3>
+                    <div class="footer__social">
+                        <a href="#" class="footer__social-link" aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="footer__social-link" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="footer__social-link" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="footer__social-link" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer__bottom">
+                <p class="footer__copyright">
+                    &copy; <span id="current-year">2024</span> MultiTools Hub. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/script.js"></script>
+    <script src="assets/image-converter.js"></script>
+</body>
+</html>

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Calculator - MultiTools Hub</title>
+    <meta name="description" content="Calculate your exact age in years, months, days, hours, and minutes. Find out how many days you've lived and upcoming birthday countdown.">
+    <link rel="stylesheet" href="assets/styles.css">
+    <link rel="stylesheet" href="assets/age-calculator.css">
+    <link href="assets/https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header" id="header">
+        <nav class="nav container">
+            <div class="nav__brand">
+                <i class="fas fa-tools nav__logo-icon"></i>
+                <span class="nav__logo-text">MultiTools Hub</span>
+            </div>
+            
+            <div class="nav__menu" id="nav-menu">
+                <ul class="nav__list">
+                    <li class="nav__item">
+                        <a href="index.html" class="nav__link">Home</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="#tools" class="nav__link">Tools</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="index.html#about" class="nav__link">About</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="index.html#contact" class="nav__link">Contact</a>
+                    </li>
+                </ul>
+                <div class="nav__close" id="nav-close">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            
+            <div class="nav__toggle" id="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Tool Header -->
+        <section class="tool-header section">
+            <div class="container">
+                <div class="tool-header__content">
+                    <div class="tool-header__icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h1 class="tool-header__title">Age Calculator</h1>
+                    <p class="tool-header__description">
+                        Calculate your exact age in years, months, days, hours, and minutes. 
+                        Discover interesting facts about your life and get countdown to your next birthday.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Age Calculator Tool -->
+        <section class="calculator-tool section">
+            <div class="container">
+                <div class="calculator__container">
+                    <!-- Input Section -->
+                    <div class="input-section">
+                        <h3 class="input-section__title">Enter Your Birth Details</h3>
+                        
+                        <div class="input-group">
+                            <label for="birth-date" class="input-label">
+                                <i class="fas fa-calendar"></i>
+                                Birth Date
+                            </label>
+                            <input type="date" id="birth-date" class="input-field" max="">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="birth-time" class="input-label">
+                                <i class="fas fa-clock"></i>
+                                Birth Time (Optional)
+                            </label>
+                            <input type="time" id="birth-time" class="input-field">
+                            <small class="input-help">For more precise calculations</small>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="calculate-to-date" class="input-label">
+                                <i class="fas fa-calendar-check"></i>
+                                Calculate Age To
+                            </label>
+                            <input type="date" id="calculate-to-date" class="input-field">
+                            <small class="input-help">Leave empty to calculate to today</small>
+                        </div>
+
+                        <div class="input-actions">
+                            <button id="calculate-btn" class="btn btn--primary">
+                                <i class="fas fa-calculator"></i>
+                                Calculate Age
+                            </button>
+                            <button id="clear-btn" class="btn btn--secondary">
+                                <i class="fas fa-refresh"></i>
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Results Section -->
+                    <div class="results-section" id="results-section" style="display: none;">
+                        <h3 class="results-section__title">Your Age Details</h3>
+                        
+                        <!-- Main Age Display -->
+                        <div class="age-display">
+                            <div class="age-card age-card--primary">
+                                <div class="age-card__value" id="main-age">25</div>
+                                <div class="age-card__label">Years Old</div>
+                            </div>
+                        </div>
+
+                        <!-- Detailed Breakdown -->
+                        <div class="age-breakdown">
+                            <div class="age-item">
+                                <div class="age-item__icon">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                                <div class="age-item__content">
+                                    <div class="age-item__value" id="years-value">25</div>
+                                    <div class="age-item__label">Years</div>
+                                </div>
+                            </div>
+
+                            <div class="age-item">
+                                <div class="age-item__icon">
+                                    <i class="fas fa-calendar"></i>
+                                </div>
+                                <div class="age-item__content">
+                                    <div class="age-item__value" id="months-value">6</div>
+                                    <div class="age-item__label">Months</div>
+                                </div>
+                            </div>
+
+                            <div class="age-item">
+                                <div class="age-item__icon">
+                                    <i class="fas fa-sun"></i>
+                                </div>
+                                <div class="age-item__content">
+                                    <div class="age-item__value" id="days-value">15</div>
+                                    <div class="age-item__label">Days</div>
+                                </div>
+                            </div>
+
+                            <div class="age-item">
+                                <div class="age-item__icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="age-item__content">
+                                    <div class="age-item__value" id="hours-value">12</div>
+                                    <div class="age-item__label">Hours</div>
+                                </div>
+                            </div>
+
+                            <div class="age-item">
+                                <div class="age-item__icon">
+                                    <i class="fas fa-stopwatch"></i>
+                                </div>
+                                <div class="age-item__content">
+                                    <div class="age-item__value" id="minutes-value">30</div>
+                                    <div class="age-item__label">Minutes</div>
+                                </div>
+                            </div>
+
+                            <div class="age-item">
+                                <div class="age-item__icon">
+                                    <i class="fas fa-tachometer-alt"></i>
+                                </div>
+                                <div class="age-item__content">
+                                    <div class="age-item__value" id="seconds-value">45</div>
+                                    <div class="age-item__label">Seconds</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Life Statistics -->
+                        <div class="life-stats">
+                            <h4 class="life-stats__title">Life Statistics</h4>
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="stat-card__icon">
+                                        <i class="fas fa-calendar-day"></i>
+                                    </div>
+                                    <div class="stat-card__content">
+                                        <div class="stat-card__value" id="total-days">9,125</div>
+                                        <div class="stat-card__label">Total Days Lived</div>
+                                    </div>
+                                </div>
+
+                                <div class="stat-card">
+                                    <div class="stat-card__icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="stat-card__content">
+                                        <div class="stat-card__value" id="total-hours">219,000</div>
+                                        <div class="stat-card__label">Total Hours</div>
+                                    </div>
+                                </div>
+
+                                <div class="stat-card">
+                                    <div class="stat-card__icon">
+                                        <i class="fas fa-stopwatch"></i>
+                                    </div>
+                                    <div class="stat-card__content">
+                                        <div class="stat-card__value" id="total-minutes">13,140,000</div>
+                                        <div class="stat-card__label">Total Minutes</div>
+                                    </div>
+                                </div>
+
+                                <div class="stat-card">
+                                    <div class="stat-card__icon">
+                                        <i class="fas fa-heartbeat"></i>
+                                    </div>
+                                    <div class="stat-card__content">
+                                        <div class="stat-card__value" id="heartbeats">945,000,000</div>
+                                        <div class="stat-card__label">Estimated Heartbeats</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Next Birthday Countdown -->
+                        <div class="birthday-countdown" id="birthday-countdown">
+                            <h4 class="countdown__title">Next Birthday Countdown</h4>
+                            <div class="countdown-display">
+                                <div class="countdown-item">
+                                    <div class="countdown-value" id="countdown-months">5</div>
+                                    <div class="countdown-label">Months</div>
+                                </div>
+                                <div class="countdown-item">
+                                    <div class="countdown-value" id="countdown-days">15</div>
+                                    <div class="countdown-label">Days</div>
+                                </div>
+                                <div class="countdown-item">
+                                    <div class="countdown-value" id="countdown-hours">12</div>
+                                    <div class="countdown-label">Hours</div>
+                                </div>
+                                <div class="countdown-item">
+                                    <div class="countdown-value" id="countdown-minutes">30</div>
+                                    <div class="countdown-label">Minutes</div>
+                                </div>
+                            </div>
+                            <div class="next-birthday-info">
+                                <p>Your next birthday is on <span id="next-birthday-date">March 15, 2024</span></p>
+                                <p>You will turn <span id="next-age">26</span> years old</p>
+                            </div>
+                        </div>
+
+                        <!-- Zodiac Sign -->
+                        <div class="zodiac-section">
+                            <h4 class="zodiac__title">Your Zodiac Sign</h4>
+                            <div class="zodiac-card">
+                                <div class="zodiac-icon" id="zodiac-icon">♓</div>
+                                <div class="zodiac-content">
+                                    <div class="zodiac-name" id="zodiac-name">Pisces</div>
+                                    <div class="zodiac-dates" id="zodiac-dates">February 19 - March 20</div>
+                                    <div class="zodiac-description" id="zodiac-description">
+                                        Compassionate, artistic, intuitive, gentle, wise, musical
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features section">
+            <div class="container">
+                <h2 class="section__title">Age Calculator Features</h2>
+                <div class="features__grid">
+                    <div class="feature-card">
+                        <i class="fas fa-calculator feature-card__icon"></i>
+                        <h3 class="feature-card__title">Precise Calculations</h3>
+                        <p class="feature-card__description">
+                            Calculate your exact age down to seconds with optional birth time input.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-chart-line feature-card__icon"></i>
+                        <h3 class="feature-card__title">Life Statistics</h3>
+                        <p class="feature-card__description">
+                            Discover fascinating statistics about your life including total days lived and heartbeats.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-birthday-cake feature-card__icon"></i>
+                        <h3 class="feature-card__title">Birthday Countdown</h3>
+                        <p class="feature-card__description">
+                            Real-time countdown to your next birthday with live updates.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-star feature-card__icon"></i>
+                        <h3 class="feature-card__title">Zodiac Information</h3>
+                        <p class="feature-card__description">
+                            Automatically determine your zodiac sign with personality traits.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How to Use Section -->
+        <section class="how-to-use section">
+            <div class="container">
+                <h2 class="section__title">How to Use</h2>
+                <div class="steps__container">
+                    <div class="step">
+                        <div class="step__number">1</div>
+                        <div class="step__content">
+                            <h3 class="step__title">Enter Birth Date</h3>
+                            <p class="step__description">
+                                Select your birth date using the date picker. Optionally add birth time for more precision.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step__number">2</div>
+                        <div class="step__content">
+                            <h3 class="step__title">Choose Target Date</h3>
+                            <p class="step__description">
+                                Leave empty to calculate to today, or select a specific date to calculate your age on that day.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step__number">3</div>
+                        <div class="step__content">
+                            <h3 class="step__title">View Results</h3>
+                            <p class="step__description">
+                                Get detailed age breakdown, life statistics, birthday countdown, and zodiac information.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__content">
+                <div class="footer__section">
+                    <div class="footer__brand">
+                        <i class="fas fa-tools footer__logo-icon"></i>
+                        <span class="footer__logo-text">MultiTools Hub</span>
+                    </div>
+                    <p class="footer__description">
+                        Your trusted partner for digital tools and utilities. 
+                        Making complex tasks simple and accessible.
+                    </p>
+                </div>
+                
+                <div class="footer__section">
+                    <h3 class="footer__title">Other Tools</h3>
+                    <div class="footer__links">
+                        <a href="image-converter.html" class="footer__link">Image Converter</a>
+                        <a href="background-remover.html" class="footer__link">Background Remover</a>
+                        <a href="#" class="footer__link">HTML to Text</a>
+                    </div>
+                </div>
+                
+                <div class="footer__section">
+                    <h3 class="footer__title">Contact Info</h3>
+                    <div class="footer__contact">
+                        <p class="footer__contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>contact@multitoolshub.com</span>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="footer__section">
+                    <h3 class="footer__title">Follow Us</h3>
+                    <div class="footer__social">
+                        <a href="#" class="footer__social-link" aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="footer__social-link" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="footer__social-link" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="footer__social-link" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer__bottom">
+                <p class="footer__copyright">
+                    &copy; <span id="current-year">2024</span> MultiTools Hub. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/script.js"></script>
+    <script src="assets/age-calculator.js"></script>
+</body>
+</html>

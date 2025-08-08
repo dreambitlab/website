@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PNG to JPG Converter - Multi-Tools</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .converter-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .upload-area {
+            border: 2px dashed #e0e0e0;
+            border-radius: 8px;
+            padding: 3rem 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 2rem;
+        }
+
+        .upload-area.drag-over {
+            border-color: #4f46e5;
+            background-color: #f8faff;
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: #9ca3af;
+            margin-bottom: 1rem;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .quality-control {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
+
+        .quality-slider {
+            width: 100%;
+            margin: 1rem 0;
+        }
+
+        .file-previews {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .file-preview {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .preview-image {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-name {
+            font-size: 0.875rem;
+            color: #6b7280;
+            word-break: break-all;
+        }
+
+        .remove-file {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        .convert-button {
+            width: 100%;
+            padding: 1rem 2rem;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin: 1rem 0;
+        }
+
+        .convert-button:hover {
+            background: #4338ca;
+        }
+
+        .convert-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .spinner {
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #4f46e5;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 1rem 0;
+            display: none;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #4f46e5;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .error-message {
+            background: #fef2f2;
+            color: #dc2626;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            display: none;
+        }
+
+        .success-message {
+            background: #f0fdf4;
+            color: #166534;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            display: none;
+        }
+
+        .download-section {
+            margin: 2rem 0;
+            display: none;
+        }
+
+        .download-button {
+            background: #059669;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 0.5rem;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.875rem;
+        }
+
+        .download-button:hover {
+            background: #047857;
+        }
+
+        @media (max-width: 768px) {
+            .converter-container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+
+            .upload-area {
+                padding: 2rem 1rem;
+            }
+
+            .file-previews {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="converter-container">
+        <h1>PNG to JPG Converter</h1>
+        <p>Convert your PNG images to JPG format with customizable quality settings.</p>
+
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-icon">📁</div>
+            <p><strong>Click to upload</strong> or drag and drop your PNG files here</p>
+            <p class="text-sm">Supports multiple files</p>
+            <input type="file" id="fileInput" class="file-input" accept=".png,image/png" multiple>
+        </div>
+
+        <div class="quality-control">
+            <label for="qualitySlider">
+                <strong>JPG Quality: <span id="qualityValue">80</span>%</strong>
+            </label>
+            <input type="range" id="qualitySlider" class="quality-slider" 
+                   min="1" max="100" value="80" step="1">
+            <p class="text-sm">Lower values = smaller file size, higher values = better quality</p>
+        </div>
+
+        <div class="file-previews" id="filePreviews"></div>
+
+        <div class="error-message" id="errorMessage"></div>
+        <div class="success-message" id="successMessage"></div>
+
+        <button class="convert-button" id="convertButton" disabled>
+            Convert to JPG
+        </button>
+
+        <div class="loading-spinner" id="loadingSpinner">
+            <div class="spinner"></div>
+            <p>Converting your images...</p>
+        </div>
+
+        <div class="progress-bar" id="progressBar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="download-section" id="downloadSection">
+            <h3>Download Converted Files</h3>
+            <div id="downloadLinks"></div>
+        </div>
+    </div>
+
+    <script>
+        class PNGToJPGConverter {
+            constructor() {
+                this.files = [];
+                this.quality = 80;
+                this.initializeElements();
+                this.bindEvents();
+            }
+
+            initializeElements() {
+                this.uploadArea = document.getElementById('uploadArea');
+                this.fileInput = document.getElementById('fileInput');
+                this.filePreviews = document.getElementById('filePreviews');
+                this.qualitySlider = document.getElementById('qualitySlider');
+                this.qualityValue = document.getElementById('qualityValue');
+                this.convertButton = document.getElementById('convertButton');
+                this.loadingSpinner = document.getElementById('loadingSpinner');
+                this.progressBar = document.getElementById('progressBar');
+                this.progressFill = document.getElementById('progressFill');
+                this.errorMessage = document.getElementById('errorMessage');
+                this.successMessage = document.getElementById('successMessage');
+                this.downloadSection = document.getElementById('downloadSection');
+                this.downloadLinks = document.getElementById('downloadLinks');
+            }
+
+            bindEvents() {
+                this.uploadArea.addEventListener('click', () => this.fileInput.click());
+                this.uploadArea.addEventListener('dragover', this.handleDragOver.bind(this));
+                this.uploadArea.addEventListener('dragleave', this.handleDragLeave.bind(this));
+                this.uploadArea.addEventListener('drop', this.handleDrop.bind(this));
+                
+                this.fileInput.addEventListener('change', this.handleFileSelect.bind(this));
+                this.qualitySlider.addEventListener('input', this.handleQualityChange.bind(this));
+                this.convertButton.addEventListener('click', this.convertFiles.bind(this));
+            }
+
+            handleDragOver(e) {
+                e.preventDefault();
+                this.uploadArea.classList.add('drag-over');
+            }
+
+            handleDragLeave(e) {
+                e.preventDefault();
+                this.uploadArea.classList.remove('drag-over');
+            }
+
+            handleDrop(e) {
+                e.preventDefault();
+                this.uploadArea.classList.remove('drag-over');
+                const files = Array.from(e.dataTransfer.files);
+                this.processFiles(files);
+            }
+
+            handleFileSelect(e) {
+                const files = Array.from(e.target.files);
+                this.processFiles(files);
+            }
+
+            processFiles(files) {
+                this.hideMessages();
+                const pngFiles = files.filter(file => file.type === 'image/png');
+                const invalidFiles = files.filter(file => file.type !== 'image/png');
+
+                if (invalidFiles.length > 0) {
+                    this.showError(`${invalidFiles.length} non-PNG file(s) were skipped. Please upload only PNG files.`);
+                }
+
+                if (pngFiles.length === 0) {
+                    return;
+                }
+
+                this.files = [...this.files, ...pngFiles];
+                this.updatePreviews();
+                this.updateConvertButton();
+            }
+
+            updatePreviews() {
+                this.filePreviews.innerHTML = '';
+                this.files.forEach((file, index) => {
+                    const preview = document.createElement('div');
+                    preview.className = 'file-preview';
+                    
+                    const img = document.createElement('img');
+                    img.className = 'preview-image';
+                    img.src = URL.createObjectURL(file);
+                    
+                    const fileName = document.createElement('div');
+                    fileName.className = 'file-name';
+                    fileName.textContent = file.name;
+                    
+                    const removeBtn = document.createElement('button');
+                    removeBtn.className = 'remove-file';
+                    removeBtn.textContent = '×';
+                    removeBtn.onclick = () => this.removeFile(index);
+                    
+                    preview.appendChild(img);
+                    preview.appendChild(fileName);
+                    preview.appendChild(removeBtn);
+                    
+                    this.filePreviews.appendChild(preview);
+                });
+            }
+
+            removeFile(index) {
+                this.files.splice(index, 1);
+                this.updatePreviews();
+                this.updateConvertButton();
+            }
+
+            handleQualityChange(e) {
+                this.quality = parseInt(e.target.value);
+                this.qualityValue.textContent = this.quality;
+            }
+
+            updateConvertButton() {
+                this.convertButton.disabled = this.files.length === 0;
+            }
+
+            async convertFiles() {
+                if (this.files.length === 0) return;
+
+                this.showLoading();
+                this.hideMessages();
+                this.hideDownloads();
+
+                const formData = new FormData();
+                this.files.forEach(file => formData.append('images', file));
+                formData.append('quality', this.quality);
+
+                try {
+                    const response = await fetch('/api/convert', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Server error: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        this.showSuccess('Conversion completed successfully!');
+                        this.showDownloads(result.files, result.zipFile);
+                    } else {
+                        throw new Error(result.message || 'Conversion failed');
+                    }
+
+                } catch (error) {
+                    this.showError(`Conversion failed: ${error.message}`);
+                } finally {
+                    this.hideLoading();
+                }
+            }
+
+            showDownloads(files, zipFile) {
+                this.downloadLinks.innerHTML = '';
+                
+                if (files && files.length > 0) {
+                    files.forEach(file => {
+                        const link = document.createElement('a');
+                        link.href = `/api/download/${file}`;
+                        link.className = 'download-button';
+                        link.textContent = `Download ${file}`;
+                        link.download = file;
+                        this.downloadLinks.appendChild(link);
+                    });
+                }
+
+                if (zipFile && files.length > 1) {
+                    const zipLink = document.createElement('a');
+                    zipLink.href = `/api/download/${zipFile}`;
+                    zipLink.className = 'download-button';
+                    zipLink.textContent = 'Download All as ZIP';
+                    zipLink.download = zipFile;
+                    zipLink.style.background = '#7c3aed';
+                    this.downloadLinks.appendChild(zipLink);
+                }
+
+                this.downloadSection.style.display = 'block';
+            }
+
+            hideDownloads() {
+                this.downloadSection.style.display = 'none';
+            }
+
+            showLoading() {
+                this.loadingSpinner.style.display = 'block';
+                this.progressBar.style.display = 'block';
+                this.convertButton.disabled = true;
+                
+                let progress = 0;
+                this.progressInterval = setInterval(() => {
+                    progress = Math.min(progress + Math.random() * 10, 95);
+                    this.progressFill.style.width = progress + '%';
+                }, 200);
+            }
+
+            hideLoading() {
+                this.loadingSpinner.style.display = 'none';
+                this.progressBar.style.display = 'none';
+                this.convertButton.disabled = false;
+                
+                if (this.progressInterval) {
+                    clearInterval(this.progressInterval);
+                }
+                this.progressFill.style.width = '100%';
+                setTimeout(() => {
+                    this.progressFill.style.width = '0%';
+                }, 500);
+            }
+
+            showError(message) {
+                this.errorMessage.textContent = message;
+                this.errorMessage.style.display = 'block';
+                this.successMessage.style.display = 'none';
+            }
+
+            showSuccess(message) {
+                this.successMessage.textContent = message;
+                this.successMessage.style.display = 'block';
+                this.errorMessage.style.display = 'none';
+            }
+
+            hideMessages() {
+                this.errorMessage.style.display = 'none';
+                this.successMessage.style.display = 'none';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            new PNGToJPGConverter();
+        });
+    </script>
+</body>
+</html>
