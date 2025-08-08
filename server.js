@@ -1,9 +1,35 @@
 const express = require('express');
 const path = require('path');
+const multer = require('multer');
+const sharp = require('sharp');
+const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
+
+// Create uploads directory if it doesn't exist
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+// Configure multer for file uploads
+const storage = multer.memoryStorage();
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 10 * 1024 * 1024, // 10MB limit
+    },
+    fileFilter: (req, file, cb) => {
+        // Check if file is an image
+        if (file.mimetype.startsWith('image/')) {
+            cb(null, true);
+        } else {
+            cb(new Error('Only image files are allowed!'), false);
+        }
+    }
+});
 
 // Middleware
 app.use(express.static('public', {
@@ -25,16 +51,6 @@ if (NODE_ENV === 'production') {
 
 // Set view engine (if using template engines in the future)
 app.set('views', path.join(__dirname, 'views'));
-
-// Health check endpoint
-app.get('/health', (req, res) => {
-    res.status(200).json({
-        status: 'OK',
-        timestamp: new Date().toISOString(),
-        uptime: process.uptime(),
-        version: '1.0.0'
-    });
-});
 
 // Routes
 app.get('/', (req, res) => {
@@ -64,24 +80,7 @@ app.get('/image-converter', (req, res) => {
 });
 
 app.get('/image-compressor', (req, res) => {
-    res.send(`
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Image Compressor - Multitoolspro</title>
-            <link rel="stylesheet" href="/css/style.css">
-        </head>
-        <body>
-            <div style="padding: 100px 20px; text-align: center;">
-                <h1>Image Compressor</h1>
-                <p>This tool is coming soon! Compress images to reduce file size.</p>
-                <a href="/" style="color: #2563eb; text-decoration: none;">← Back to Home</a>
-            </div>
-        </body>
-        </html>
-    `);
+    res.sendFile(path.join(__dirname, 'views', 'image-compressor.html'));
 });
 
 app.get('/age-calculator', (req, res) => {
@@ -148,8 +147,128 @@ app.post('/api/convert-image', (req, res) => {
     res.json({ message: 'Image conversion API endpoint - Coming soon!' });
 });
 
-app.post('/api/compress-image', (req, res) => {
-    res.json({ message: 'Image compression API endpoint - Coming soon!' });
+app.post('/api/compress-images', upload.array('images', 10), async (req, res) => {
+    try {
+        if (!req.files || req.files.length === 0) {
+            return res.status(400).json({
+                success: false,
+                error: 'No images uploaded'
+            });
+        }
+
+        const { quality = 80, format = 'original', width, height, maintainAspect = 'true' } = req.body;
+        const results = [];
+
+        for (const file of req.files) {
+            try {
+                let sharpInstance = sharp(file.buffer);
+
+                // Get original image metadata
+                const metadata = await sharpInstance.metadata();
+                const originalSize = file.size;
+
+                // Handle resizing if dimensions are provided
+                if (width || height) {
+                    const resizeOptions = {};
+
+                    if (width) resizeOptions.width = parseInt(width);
+                    if (height) resizeOptions.height = parseInt(height);
+
+                    if (maintainAspect === 'false') {
+                        resizeOptions.fit = 'fill';
+                    }
+
+                    sharpInstance = sharpInstance.resize(resizeOptions);
+                }
+
+                // Determine output format
+                let outputFormat = format === 'original' ? metadata.format : format;
+                let mimeType = `image/${outputFormat}`;
+
+                // Apply compression based on format
+                let compressedBuffer;
+                const qualityValue = parseInt(quality);
+
+                switch (outputFormat) {
+                    case 'jpeg':
+                    case 'jpg':
+                        compressedBuffer = await sharpInstance
+                            .jpeg({ quality: qualityValue, progressive: true })
+                            .toBuffer();
+                        mimeType = 'image/jpeg';
+                        break;
+                    case 'png':
+                        compressedBuffer = await sharpInstance
+                            .png({ quality: qualityValue, progressive: true })
+                            .toBuffer();
+                        mimeType = 'image/png';
+                        break;
+                    case 'webp':
+                        compressedBuffer = await sharpInstance
+                            .webp({ quality: qualityValue })
+                            .toBuffer();
+                        mimeType = 'image/webp';
+                        break;
+                    default:
+                        // For other formats, use the original format with quality adjustment
+                        if (metadata.format === 'jpeg' || metadata.format === 'jpg') {
+                            compressedBuffer = await sharpInstance
+                                .jpeg({ quality: qualityValue, progressive: true })
+                                .toBuffer();
+                            mimeType = 'image/jpeg';
+                        } else if (metadata.format === 'png') {
+                            compressedBuffer = await sharpInstance
+                                .png({ quality: qualityValue })
+                                .toBuffer();
+                            mimeType = 'image/png';
+                        } else {
+                            compressedBuffer = await sharpInstance
+                                .jpeg({ quality: qualityValue, progressive: true })
+                                .toBuffer();
+                            mimeType = 'image/jpeg';
+                        }
+                }
+
+                // Generate filename
+                const originalName = file.originalname;
+                const nameWithoutExt = originalName.substring(0, originalName.lastIndexOf('.')) || originalName;
+                const extension = outputFormat === 'jpeg' ? 'jpg' : outputFormat;
+                const filename = `${nameWithoutExt}_compressed.${extension}`;
+
+                results.push({
+                    filename,
+                    originalSize,
+                    compressedSize: compressedBuffer.length,
+                    data: compressedBuffer.toString('base64'),
+                    mimeType
+                });
+
+            } catch (error) {
+                console.error(`Error processing ${file.originalname}:`, error);
+                // Continue with other files even if one fails
+            }
+        }
+
+        if (results.length === 0) {
+            return res.status(500).json({
+                success: false,
+                error: 'Failed to process any images'
+            });
+        }
+
+        res.json({
+            success: true,
+            images: results,
+            message: `Successfully compressed ${results.length} image(s)`
+        });
+
+    } catch (error) {
+        console.error('Image compression error:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Internal server error during image compression'
+        });
+    }
 });
 
 app.post('/api/calculate-age', (req, res) => {
